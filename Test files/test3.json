@@ -1,0 +1,27 @@
+{
+  "SelectAttributes": [
+    "cust",
+    "prod",
+    "sum_quant_1",
+    "min_date_1",
+    "sum_quant_2",
+    "max_date_2"
+  ],
+  "NumberOfGroupingVariables": 2,
+  "GroupingAttributes": [
+    "cust",
+    "prod"
+  ],
+  "AggregateFunctions": [
+    "sum_quant_1",
+    "avg_quant_1",
+    "min_date_1",
+    "sum_quant_2",
+    "max_date_2"
+  ],
+  "GroupingVariablePredicate": [
+    "cust_1 = 'Dan' and prod_1 = 'Butter'",
+    "date_2 > 2017-12-23"
+  ],
+  "HavingCondition": ""
+}

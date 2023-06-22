@@ -1,0 +1,32 @@
+Test 1
+
+select  cust,prod,sum(X.quant),sum(Y.quant),sum(Z.quant)
+from sales
+group by cust,prod: X,Y,Z
+such that X.state = 'NY' and  Y.state = 'NJ' and  Z.state = 'CT'
+having sum(X.quant) > 2 * sum(Y.quant) or avg(X.quant) > avg(Z.quant)
+
+Test 2
+
+
+select    cust ,  prod ,  sum(X.quant) ,  max(X.cust) ,  avg(X.day) ,  sum(Y.quant) ,  sum(Z.quant) ,  count(Z.year) 
+from sales
+group by cust,prod: X,Y,Z
+such that X.state = 'NY' and  Y.state = 'NJ' and  Z.state = 'CT'  and Y.avg(quant) > Z.quant
+having sum(X.quant) > 2 * sum(Y.quant) or avg(X.quant) > avg(Z.quant)
+
+Test 3
+
+
+select     cust ,  prod ,  sum(X.quant) ,  min(X.date) ,  sum(Y.quant) ,  max(Y.date)  
+from sales
+group by cust,prod: X,Y
+such that X.cust = 'Dan' and X.prod = 'Butter' , Y.date > 2017-12-23
+
+Test 4
+
+select  cust ,  prod ,  state ,  avg(X.quant) , max(X.quant) ,  avg(Y.quant) ,  sum(Y.quant) ,  max(Y.quant) , avg(quant) , sum(quant) 
+from sales
+group by cust,prod,state: X,Y,Z
+such that  avg(quant) < X.quant and X.month < 7 , avg(quant) < Y.quant and Y.month > 6 
+having sum(X.quant) > 2 * sum(Y.quant) or  avg(X.quant) > avg(Z.quant)

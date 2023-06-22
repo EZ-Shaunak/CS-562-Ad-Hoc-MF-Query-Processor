@@ -1,0 +1,33 @@
+with t0 as (
+	select cust,prod,state,avg(quant) as avg_quant_0, sum(quant) as sum_quant_0
+	from sales s
+	group by cust,prod,state
+	order by cust,prod,state
+),
+t1 as(
+	select s.cust,s.prod,s.state,avg(quant) as avg_quant_1, sum(quant) as sum_quant_1
+	from sales s,t0
+	where s.cust=t0.cust and t0.prod=s.prod and t0.state=s.state
+	and t0.avg_quant_0<s.quant and s.month<7
+	group by s.cust,s.prod,s.state
+),
+t2 as(
+	select s.cust,s.prod,s.state,avg(quant) as avg_quant_2, sum(quant) as sum_quant_2,max(quant) as max_quant_2
+	from sales s,t0
+	where s.cust=t0.cust and t0.prod=s.prod and t0.state=s.state
+	and t0.avg_quant_0<s.quant and s.month>6
+	group by s.cust,s.prod,s.state
+)
+select  t0.cust,t0.prod,t0.state,t1.avg_quant_1,t1.sum_quant_1,t2.avg_quant_2,t2.sum_quant_2,t2.max_quant_2
+from t0,t1,t2
+where t0.state=t1.state and t1.state=t2.state and t2.state=t0.state
+	and t0.cust=t1.cust and t1.cust=t2.cust and t2.cust=t0.cust
+	and t0.prod=t1.prod and t1.prod=t2.prod and t2.prod=t0.prod and t2.max_quant_2>200
+	
+	
+-- 	select * from sales where cust ='Dan' and prod='Ham' and state = 'NY' and month < 7 and 501.3157894736842105 < quant
+	
+-- 	select cust,prod,state,avg(quant) from sales 
+-- 	 where cust ='Dan' and prod='Ham' and state = 'NY'
+-- 	 group by cust,prod,state
+	

@@ -1,0 +1,26 @@
+with NJ as(
+select cust,prod,sum(quant) as sum_quant_2
+from sales 
+where state = 'NJ'
+group by cust,prod
+order by cust,prod
+),
+CT as(
+select cust,prod,sum(quant) as sum_quant_3,avg(quant) as avg_quant_3
+from sales 
+where state = 'CT'
+group by cust,prod
+order by cust,prod
+),
+NY as(
+select cust,prod,sum(quant) as sum_quant_1,avg(quant) as avg_quant_1
+from sales 
+where state = 'NY'
+group by cust,prod
+order by cust,prod
+)
+
+select NJ.cust,NJ.prod,NY.sum_quant_1,NJ.sum_quant_2,CT.sum_quant_3,NY.avg_quant_1,CT.avg_quant_3
+from NJ,CT,NY
+where NJ.cust=CT.cust and CT.cust=NY.cust and NY.prod=NJ.prod and NJ.prod=CT.prod and (sum_quant_1 > 2 * sum_quant_2 or avg_quant_1 > avg_quant_3)
+order by NJ.cust,NJ.prod

@@ -1,0 +1,35 @@
+with 
+NY as(
+	select cust,prod,sum(quant) as sum_quant_1,avg(quant) as avg_quant_1,avg(month) as avg_month_1,
+        	avg(day) as avg_day_1,max(cust) as max_cust_1
+	from sales 
+	where state = 'NY'
+	group by cust,prod
+	order by cust,prod
+),
+NJ as(
+	select cust,prod,sum(quant) as sum_quant_2, avg(quant) as avg_quant_2
+	from sales 
+	where state = 'NJ'
+	group by cust,prod
+	order by cust,prod
+),
+T as (
+	select s.cust,s.prod,sum(s.quant) as sum_quant_3,count(s.year) as count_year_3,avg(s.quant) as avg_quant_3
+	from NY,NJ,sales s
+	where NJ.cust=NY.cust and NJ.prod=NY.prod and
+		NJ.cust = s.cust and NJ.prod =s.prod and
+		NY.cust = s.cust and NY.prod =s.prod and
+	s.state='CT' and NJ.avg_quant_2 > s.quant
+	
+	group by s.cust,s.prod
+)
+select s.cust,s.prod,NY.sum_quant_1,NY.max_cust_1,NY.avg_day_1,NJ.sum_quant_2,s.sum_quant_3,s.count_year_3
+from NY,NJ,T as s
+where NJ.cust=NY.cust and NJ.prod=NY.prod and
+		NJ.cust = s.cust and NJ.prod =s.prod and
+		NY.cust = s.cust and NY.prod =s.prod  
+		and
+		(NY.sum_quant_1 > 2 * NJ.sum_quant_2 or NY.avg_quant_1 > s.avg_quant_3)
+order by cust,prod
+

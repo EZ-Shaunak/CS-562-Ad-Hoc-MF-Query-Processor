@@ -1,0 +1,21 @@
+with T1 as (
+	select cust,prod,sum(quant) as sum_quant_1, min(date) as min_date_1
+	from sales
+	where cust = 'Dan' and prod = 'Butter'
+	group by cust,prod
+	order by cust,prod
+),
+T2 as (
+	select cust,prod,sum(quant) as sum_quant_2, max(date) as max_date_2
+	from sales
+	where date > '2017-12-23'
+	group by cust,prod
+	order by cust,prod
+)
+
+select T2.cust,T2.prod,T1.sum_quant_1,T1.min_date_1,T2.sum_quant_2,T2.max_date_2
+from T2
+left join T1
+on T1.cust=T2.cust and T1.prod=T2.prod
+order by T2.cust,T2.prod
+

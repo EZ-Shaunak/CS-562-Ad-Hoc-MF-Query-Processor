@@ -1,0 +1,25 @@
+{
+  "SelectAttributes": [
+    "cust",
+    "prod",
+    "sum_quant_1",
+    "sum_quant_2",
+    "sum_quant_3"
+  ],
+  "NumberOfGroupingVariables": 3,
+  "GroupingAttributes": [
+    "cust",
+    "prod"
+  ],
+  "AggregateFunctions": [
+    "sum_quant_1",
+    "sum_quant_2",
+    "sum_quant_3"
+  ],
+  "GroupingVariablePredicate": [
+    "state_1 = 'NY'",
+    "state_2 = 'NJ'",
+    "state_3 = 'CT'"
+  ],
+  "HavingCondition": "sum_quant_1 > 2 * sum_quant_2 or avg_quant_1 > avg_quant_3"
+}
